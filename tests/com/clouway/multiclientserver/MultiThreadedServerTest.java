@@ -26,8 +26,6 @@ public class MultiThreadedServerTest {
         private String receivedMessage = "";
         private BufferedReader fromServer;
 
-        Socket socket;
-
         public TestClient(String hostName, int port) {
             this.hostName = hostName;
             this.port = port;
@@ -35,7 +33,7 @@ public class MultiThreadedServerTest {
 
         public void connect() {
             try {
-                socket = new Socket(hostName, port);
+                Socket socket = new Socket(hostName, port);
                 fromServer= new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (IOException e) {
                 System.err.println("Couldn't get I/O for the connection to ");
