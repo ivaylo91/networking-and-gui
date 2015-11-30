@@ -5,5 +5,4 @@ package com.clouway.multiclientserver;
  */
 public interface Display {
     void setMessage(String message);
-    String getMessage();
 }
