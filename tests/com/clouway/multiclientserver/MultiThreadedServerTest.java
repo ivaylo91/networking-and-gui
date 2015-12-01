@@ -40,7 +40,7 @@ public class MultiThreadedServerTest {
             }
         }
 
-        public void assertLastReceivedMessageIs(String message) {
+        public void assertNextReceivedMessageIs(String message) {
             try {
                 receivedMessage = fromServer.readLine();
             } catch (IOException e) {
@@ -64,14 +64,14 @@ public class MultiThreadedServerTest {
         TestClient testClient2 = new TestClient("localhost", 7777);
         TestClient testClient3 = new TestClient("localhost", 7777);
         testClient1.connect();
-        testClient1.assertLastReceivedMessageIs("Hello you are client number 1!");
+        testClient1.assertNextReceivedMessageIs("Hello you are client number 1!");
         testClient2.connect();
-        testClient2.assertLastReceivedMessageIs("Hello you are client number 2!");
-        testClient1.assertLastReceivedMessageIs("client number 2 is connect");
+        testClient2.assertNextReceivedMessageIs("Hello you are client number 2!");
+        testClient1.assertNextReceivedMessageIs("client number 2 is connect");
         testClient3.connect();
-        testClient3.assertLastReceivedMessageIs("Hello you are client number 3!");
-        testClient1.assertLastReceivedMessageIs("client number 3 is connect");
-        testClient2.assertLastReceivedMessageIs("client number 3 is connect");
+        testClient3.assertNextReceivedMessageIs("Hello you are client number 3!");
+        testClient1.assertNextReceivedMessageIs("client number 3 is connect");
+        testClient2.assertNextReceivedMessageIs("client number 3 is connect");
     }
 
     @After
