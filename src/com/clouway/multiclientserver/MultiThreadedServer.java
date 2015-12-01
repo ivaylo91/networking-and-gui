@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MultiThreadedServer extends AbstractExecutionThreadService {
     private final int port;
-    private List<ClientSender> acceptedClient = new ArrayList<>();
+    private List<ClientConnection> acceptedClient = new ArrayList<>();
     private ServerSocket serverSocket;
     public MultiThreadedServer(int port) {
         this.port = port;
@@ -23,10 +23,10 @@ public class MultiThreadedServer extends AbstractExecutionThreadService {
     protected void run() {
         try {
             while (isRunning()) {
-                ClientSender clientSender = new ClientSender(serverSocket.accept());
-                acceptedClient.add(clientSender);
-                clientSender.sendMessage("Hello you are client number " + acceptedClient.size() + "!");
-                sendMessagesToAllClient(clientSender);
+                ClientConnection clientConnection = new ClientConnection(serverSocket.accept());
+                sendMessagesToAllClient();
+                acceptedClient.add(clientConnection);
+                clientConnection.sendMessage("Hello you are client number " + acceptedClient.size() + "!");
             }
         } catch (IOException e) {
 
@@ -51,12 +51,10 @@ public class MultiThreadedServer extends AbstractExecutionThreadService {
         }
     }
 
-    public void sendMessagesToAllClient(ClientSender clientSender) {
-        for (Iterator<ClientSender> i = acceptedClient.iterator(); i.hasNext();) {
-            ClientSender serverThr=i.next();
-            if (!serverThr.equals(clientSender)){
-                serverThr.sendMessage("client number " + acceptedClient.size() + " is connect");
-            }
+    public void sendMessagesToAllClient() {
+        for (Iterator<ClientConnection> i = acceptedClient.iterator(); i.hasNext();) {
+            ClientConnection clientConn=i.next();
+            clientConn.sendMessage("client number " + acceptedClient.size() + " is connect");
         }
     }
 }

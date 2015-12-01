@@ -7,10 +7,10 @@ import java.net.Socket;
 /**
  * @author Slavi Dichkov (slavidichkof@gmail.com)
  */
-public class ClientSender {
+public class ClientConnection {
     private Socket socket = null;
 
-    public ClientSender(Socket socket) {
+    public ClientConnection(Socket socket) {
         this.socket = socket;
     }
 
