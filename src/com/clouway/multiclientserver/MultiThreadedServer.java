@@ -54,7 +54,8 @@ public class MultiThreadedServer extends AbstractExecutionThreadService {
     public void sendMessagesToAllClient() {
         for (Iterator<ClientConnection> i = acceptedClient.iterator(); i.hasNext();) {
             ClientConnection clientConn=i.next();
-            clientConn.sendMessage("client number " + acceptedClient.size() + " is connect");
+            int clientNumber=acceptedClient.size()+1;
+            clientConn.sendMessage("client number " + clientNumber + " is connect");
         }
     }
 }
