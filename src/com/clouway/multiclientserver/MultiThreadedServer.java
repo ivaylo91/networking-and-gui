@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MultiThreadedServer extends AbstractExecutionThreadService {
     private final int port;
-    private List<MultiServerThread> acceptedClient = new ArrayList<>();
+    private List<ClientSender> acceptedClient = new ArrayList<>();
     private ServerSocket serverSocket;
     public MultiThreadedServer(int port) {
         this.port = port;
@@ -23,10 +23,10 @@ public class MultiThreadedServer extends AbstractExecutionThreadService {
     protected void run() {
         try {
             while (isRunning()) {
-                MultiServerThread multiServerThread = new MultiServerThread(this,serverSocket.accept());
-                acceptedClient.add(multiServerThread);
-                multiServerThread.send("Hello you are client number " + acceptedClient.size() + "!");
-                sendMessagesToAllClient(multiServerThread);
+                ClientSender clientSender = new ClientSender(serverSocket.accept());
+                acceptedClient.add(clientSender);
+                clientSender.sendMessage("Hello you are client number " + acceptedClient.size() + "!");
+                sendMessagesToAllClient(clientSender);
             }
         } catch (IOException e) {
 
@@ -51,11 +51,11 @@ public class MultiThreadedServer extends AbstractExecutionThreadService {
         }
     }
 
-    public void sendMessagesToAllClient(MultiServerThread multiServerThread) {
-        for (Iterator<MultiServerThread> i = acceptedClient.iterator(); i.hasNext();) {
-            MultiServerThread serverThr=i.next();
-            if (!serverThr.equals(multiServerThread)){
-                serverThr.send("client number " + acceptedClient.size() + " is connect");
+    public void sendMessagesToAllClient(ClientSender clientSender) {
+        for (Iterator<ClientSender> i = acceptedClient.iterator(); i.hasNext();) {
+            ClientSender serverThr=i.next();
+            if (!serverThr.equals(clientSender)){
+                serverThr.sendMessage("client number " + acceptedClient.size() + " is connect");
             }
         }
     }

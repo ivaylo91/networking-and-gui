@@ -7,24 +7,14 @@ import java.net.Socket;
 /**
  * @author Slavi Dichkov (slavidichkof@gmail.com)
  */
-public class MultiServerThread extends Thread {
+public class ClientSender {
     private Socket socket = null;
-    private String message;
 
-    public MultiServerThread(MultiThreadedServer multiThreadedServer, Socket socket) {
+    public ClientSender(Socket socket) {
         this.socket = socket;
     }
 
-    public void run() {
-        sendToUser();
-    }
-
-    public void send(String message) {
-        this.message = message;
-        run();
-    }
-
-    public void sendToUser() {
+    public void sendMessage(String message) {
         PrintWriter out = null;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
