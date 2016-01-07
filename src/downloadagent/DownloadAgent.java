@@ -1,6 +1,8 @@
 package downloadagent;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -9,20 +11,63 @@ import java.net.URLConnection;
  */
 public class DownloadAgent {
 
-    public void downloadFile(String url, String filename) throws IOException {
+    private ProgressListener progressListener;
 
-        URL myUrl = new URL(url);
-        URLConnection connection = myUrl.openConnection();
+    private int counter = 0;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    public String filename;
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    public DownloadAgent(ProgressListener progressListener, String filename) {
 
-        int readBytes;
+        this.progressListener = progressListener;
 
-        while ((readBytes = br.read()) != -1) {
+        this.filename = filename;
 
-            bw.write(readBytes);
+    }
+
+    public int downloadFile(URI uri, OutputStream out) {
+
+        try {
+            URL url = uri.toURL();
+
+            URLConnection connection = url.openConnection();
+
+            InputStream inputStream = connection.getInputStream();
+
+            out = new FileOutputStream(new File(filename));
+
+            int filesize = connection.getContentLength();
+
+            byte[] buffer = new byte[2048];
+
+            int readBytes;
+
+            int totalReadBytes = 0;
+
+            while ((readBytes = inputStream.read(buffer)) > 0) {
+
+                totalReadBytes += readBytes;
+
+                int percent = (totalReadBytes * 100) / filesize;
+
+                out.write(buffer, 0, readBytes);
+
+                if (counter != percent) {
+
+                    progressListener.progressUpdate(percent);
+
+                    counter++;
+                }
+            }
+            inputStream.close();
+
+            out.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        return counter;
     }
 }
