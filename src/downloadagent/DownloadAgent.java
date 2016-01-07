@@ -15,7 +15,7 @@ public class DownloadAgent {
 
     private int counter = 0;
 
-    public String filename;
+    private String filename;
 
     public DownloadAgent(ProgressListener progressListener, String filename) {
 

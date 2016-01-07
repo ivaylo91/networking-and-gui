@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Created by clouway on 06.01.16.
+ * @author Ivaylo Penev(ipenev91@gmail.com)
  */
 public class DownloadApp {
 
