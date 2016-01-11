@@ -15,26 +15,21 @@ public class DownloadAgent {
 
     private int counter = 0;
 
-    private String filename;
-
-    public DownloadAgent(ProgressListener progressListener, String filename) {
+    public DownloadAgent(ProgressListener progressListener) {
 
         this.progressListener = progressListener;
 
-        this.filename = filename;
-
     }
 
-    public int downloadFile(URI uri, OutputStream out) {
+    public int download(URI uri, OutputStream out) {
 
         try {
+
             URL url = uri.toURL();
 
             URLConnection connection = url.openConnection();
 
             InputStream inputStream = connection.getInputStream();
-
-            out = new FileOutputStream(new File(filename));
 
             int filesize = connection.getContentLength();
 
@@ -62,8 +57,7 @@ public class DownloadAgent {
             inputStream.close();
 
             out.close();
-
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
