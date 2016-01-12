@@ -6,34 +6,51 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
- * @author Ivaylo Penev(ipenev91@gmail.com)
+ * @ author Ivaylo Penev(ipenev91@gmail.com)
  */
-public class Client extends Thread {
+public class Client {
 
-    private String server;
+    private String host;
 
     private int port;
 
-    public Client(String server, int port) {
-        this.server = server;
+    private BufferedReader input;
+
+    private Socket socket;
+
+    private DisplayMessage display;
+
+    public Client(String host, int port, DisplayMessage display) {
+
+        this.host = host;
+
         this.port = port;
+
+        this.display = display;
     }
 
-    @Override
-    public void run() {
+    public void connect() {
 
         try {
-            Socket socket = new Socket(server, port);
+            socket = new Socket(host, port);
 
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            System.out.println("Hello," + input.readLine());
+            String fromServer = input.readLine();
+
+            display.newMessage(fromServer);
 
             input.close();
 
-            socket.close();
-
-            interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void stop() {
+        try {
+            if (socket != null) {
+                socket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -57,7 +57,7 @@ public class DownloadAgent {
             inputStream.close();
 
             out.close();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
