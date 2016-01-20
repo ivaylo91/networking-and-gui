@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author Ivaylo Penev(ipenev91@gmail.com)
@@ -18,9 +21,13 @@ public class DataTimeServer {
 
     private Socket client;
 
-    public DataTimeServer(int port) {
+    private CurrentDate currentDate;
+
+    public DataTimeServer(int port, CurrentDate currentDate) {
 
         this.port = port;
+
+        this.currentDate = currentDate;
     }
 
     public void start() {
@@ -41,7 +48,9 @@ public class DataTimeServer {
 
                         PrintStream out = new PrintStream(client.getOutputStream());
 
-                        out.println("Hello " + new Date());
+                        Date date = currentDate.now();
+
+                        out.println("Hello " + date);
 
                         client.close();
 
@@ -53,7 +62,6 @@ public class DataTimeServer {
             }
         }).start();
     }
-
     public void stopServer() {
         try {
             if (ss != null) {

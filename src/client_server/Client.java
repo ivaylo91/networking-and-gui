@@ -14,13 +14,9 @@ public class Client {
 
     private int port;
 
-    private BufferedReader input;
+    private MessageDisplay display;
 
-    private Socket socket;
-
-    private DisplayMessage display;
-
-    public Client(String host, int port, DisplayMessage display) {
+    public Client(String host, int port, MessageDisplay display) {
 
         this.host = host;
 
@@ -30,11 +26,10 @@ public class Client {
     }
 
     public void connect() {
-
         try {
-            socket = new Socket(host, port);
+            Socket socket = new Socket(host, port);
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String fromServer = input.readLine();
 
@@ -42,17 +37,11 @@ public class Client {
 
             input.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void stop() {
-        try {
-            if (socket != null) {
-                socket.close();
-            }
+            socket.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
