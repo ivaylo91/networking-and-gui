@@ -1,9 +1,6 @@
 package downloadagent;
 
 import com.google.common.io.ByteStreams;
-import downloadagent.DownloadAgent;
-import downloadagent.DownloadListener;
-import downloadagent.ProgressListener;
 import org.junit.Test;
 
 import java.io.*;
@@ -38,34 +35,34 @@ public class DownloadAgentTest {
 
             assertThat(percent, is(equalTo(lastPercent)));
         }
-    }
 
-    @Test
-    public void happyPath() throws IOException, URISyntaxException {
+        @Test
+        public void happyPath() throws IOException, URISyntaxException {
 
-        DownloadListener downloadListener = new DownloadListener();
+            DownloadListener downloadListener = new DownloadListener();
 
-        DownloadAgent downloadAgent = new DownloadAgent(downloadListener);
+            DownloadAgent downloadAgent = new DownloadAgent(downloadListener);
 
-        URI uri = this.getClass().getResource("/merry-christmas.jpg").toURI();
+            URI uri = this.getClass().getResource("/merry-christmas.jpg").toURI();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        downloadAgent.download(uri, outputStream);
+            downloadAgent.download(uri, outputStream);
 
-        assertArrayEquals(outputStream.toByteArray(), getBytes(uri));
+            assertArrayEquals(outputStream.toByteArray(), getBytes(uri));
 
-        downloadListener.assertLastPercent(100);
-    }
+            downloadListener.assertLastPercent(100);
+        }
 
-    private byte[] getBytes(URI uri) throws IOException {
+        private byte[] getBytes(URI uri) throws IOException {
 
-        URL url = uri.toURL();
+            URL url = uri.toURL();
 
-        URLConnection connection = url.openConnection();
+            URLConnection connection = url.openConnection();
 
-        InputStream inputStream = connection.getInputStream();
+            InputStream inputStream = connection.getInputStream();
 
-        return ByteStreams.toByteArray(inputStream);
+            return ByteStreams.toByteArray(inputStream);
+        }
     }
 }
