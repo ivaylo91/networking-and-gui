@@ -1,9 +1,8 @@
-package client_server;
+package multiclientserverguava;
 
 /**
  * @author Ivaylo Penev(ipenev91@gmail.com)
  */
-public interface MessageDisplay {
-
+public interface DisplayMessage {
     void show(String message);
 }

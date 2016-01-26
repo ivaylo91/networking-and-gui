@@ -11,35 +11,51 @@ import java.net.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertArrayEquals;
 
 /**
  * @author Ivaylo Penev(ipenev91@gmail.com)
  */
-public class DownloadApp {
-    ProgressListener progressListener = new ProgressListener() {
+public class DownloadAgentTest {
+
+    public class DownloadListener implements ProgressListener {
+
+        private int percent = 1;
+
         @Override
         public void progressUpdate(int progress) {
-//            int percent=0;
-//            assertThat(progress,is(equals(percent)));
 
+            System.out.println("Download:" + progress + "%");
+
+            if (percent < 100) {
+
+                percent++;
+            }
         }
-    };
+
+        public void assertLastPercent(int lastPercent) {
+
+            assertThat(percent, is(equalTo(lastPercent)));
+        }
+    }
 
     @Test
     public void happyPath() throws IOException, URISyntaxException {
 
         DownloadListener downloadListener = new DownloadListener();
 
-        DownloadAgent downloadAgent = new DownloadAgent(progressListener);
+        DownloadAgent downloadAgent = new DownloadAgent(downloadListener);
 
-        URI uri = this.getClass().getResource("merry-christmas.jpg").toURI();
+        URI uri = this.getClass().getResource("/merry-christmas.jpg").toURI();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         downloadAgent.download(uri, outputStream);
 
         assertArrayEquals(outputStream.toByteArray(), getBytes(uri));
+
+        downloadListener.assertLastPercent(100);
     }
 
     private byte[] getBytes(URI uri) throws IOException {
@@ -52,5 +68,4 @@ public class DownloadApp {
 
         return ByteStreams.toByteArray(inputStream);
     }
-
 }

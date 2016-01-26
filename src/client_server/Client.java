@@ -33,7 +33,7 @@ public class Client {
 
             String fromServer = input.readLine();
 
-            display.newMessage(fromServer);
+            display.show(fromServer);
 
             input.close();
 

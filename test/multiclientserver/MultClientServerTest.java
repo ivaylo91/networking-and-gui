@@ -15,19 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author Ivaylo Penev(ipenev91@gmail.com)
  */
 public class MultClientServerTest {
-/*
-    class FakeDisplay implements Display {
-
-        public String message;
-
-        @Override
-        public void show(String message) {
-
-            this.message = message;
-
-            System.out.println(message);
-        }
-    }*/
 
     class TestClient {
 
@@ -64,7 +51,7 @@ public class MultClientServerTest {
     }
 
     @Test
-    public void clientConnect() {
+    public void clientsConnect() {
 
         Server server = new Server(3333);
 

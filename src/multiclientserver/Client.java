@@ -35,20 +35,18 @@ public class Client {
 
                     socket = new Socket(host, port);
 
-                    String message;
-
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    while ((message = input.readLine()) != null) {
+                    String message = input.readLine();
+
+                    while (message != null) {
 
                         display.show(message);
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
     }
-
 }

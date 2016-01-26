@@ -29,14 +29,13 @@ public class ClientServerTest {
         String message;
 
         @Override
-        public void newMessage(String message) {
+        public void show(String message) {
 
             this.message = message;
 
             System.out.println(message);
         }
     }
-
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery() {{
         setThreadingPolicy(new Synchroniser());
@@ -56,13 +55,7 @@ public class ClientServerTest {
 
         Client client = new Client("localhost", 3333, fakeDisplay);
 
-       /* SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");*/
-
         Date date = new Date();
-
-       /* Calendar calendar = Calendar.getInstance(TimeZone.getDefault());*/
-
- /*       Thread.currentThread().sleep(5000);*/
 
         isCurrentDate(date);
 
@@ -70,9 +63,7 @@ public class ClientServerTest {
 
         assertEquals(fakeDisplay.message, "Hello " + date);
 
-
     }
-
     public void isCurrentDate(Date date) {
 
         context.checking(new Expectations() {

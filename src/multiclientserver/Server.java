@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class Server {
 
-    private int clientsCounter = 0;
+    private int clientCounter = 0;
 
-    private int port;
+    private final int port;
 
     private ServerSocket server;
 
-    private final List<Socket> clientsList = new ArrayList<>();
+    private List<Socket> clientsList = new ArrayList<>();
 
     public Server(int port) {
 
@@ -36,25 +36,28 @@ public class Server {
 
                         Socket client = server.accept();
 
-
                         synchronized (clientsList) {
 
                             clientsList.add(client);
                         }
 
-                        clientsCounter++;
+                        increaseClients();
 
                         PrintStream print = new PrintStream(client.getOutputStream());
 
-                        print.println("Client:" + clientsCounter + " connected.");
+                        print.println("Client:" + clientCounter + " connected.");
 
-                        Thread.sleep(10);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (clientsList.size() > 0) {
 
-                        sendMessage();
+                            sendMessage();
+                        }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -63,16 +66,28 @@ public class Server {
 
     private void sendMessage() {
 
-        for (Socket cli : clientsList) {
+        for (Socket each : clientsList) {
 
             try {
-                PrintStream printStream = new PrintStream(cli.getOutputStream());
+                PrintStream printStream = new PrintStream(each.getOutputStream());
 
-                printStream.println("Hello you're a client: " + clientsCounter);
+                printStream.println("Hello you're a client: " + clientCounter);
+
+                printStream.flush();
 
             } catch (IOException e) {
-                e.printStackTrace();
+
+                try {
+                    server.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
+    }
+
+    private synchronized void increaseClients() {
+
+        clientCounter++;
     }
 }
